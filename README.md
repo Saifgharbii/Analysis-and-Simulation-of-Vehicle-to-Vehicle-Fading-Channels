@@ -21,7 +21,7 @@ matplotlib >= 3.4.0
 ### Installation
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/v2v-channel-simulation.git
+git clone https://github.com/Saifgharbii/Analysis-and-Simulation-of-Vehicle-to-Vehicle-Fading-Channels.git
 cd v2v-channel-simulation
 ```
 
