@@ -33,8 +33,8 @@ pip install numpy scipy matplotlib
 
 1. Clone this repository:
 ```bash
-git clone [your-repository-url]
-cd [repository-name]
+git clone https://github.com/Saifgharbii/Analysis-and-Simulation-of-Vehicle-to-Vehicle-Fading-Channels
+
 ```
 
 2. Run the simulation script:
@@ -123,13 +123,13 @@ This plot compares the Bit Error Rate (BER) performance under slow and fast fadi
 
 ## Contributing
 
-Feel free to submit issues and enhancement requests!
+Contributions to improve the simulation are welcome. Please follow these steps:
+
+1. Fork the repository
+2. Create a new branch
+3. Make your changes
+4. Submit a pull request
 
 ## License
 
-[Specify your license here]
-
-## References
-
-1. G. L. Stüber, "Principles of Mobile Communication," Springer, 2017.
-2. C. S. Patel, G. L. Stüber, and T. G. Pratt, "Statistical properties of amplify and forward relay fading channels," IEEE Transactions on Vehicular Technology, 2006.
+This project is licensed under the MIT License - see the LICENSE file for details.
