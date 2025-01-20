@@ -2,6 +2,14 @@
 
 This repository contains a Python implementation of a Vehicle-to-Vehicle (V2V) fading channel simulator. The simulation models the statistical properties of V2V communication channels, including envelope distribution, power gain distribution, autocorrelation, phase distribution, and bit error rate (BER) performance.
 
+## Authors
+
+- Saif Iddin Gharbi
+- Mouhamed Amine Trabelsi
+- Amal Madhi
+- Sirine Charrada
+- Chiheb El Din El Zidi
+
 ## Description
 
 The simulator implements a sum-of-sinusoids method to generate Gaussian processes that model V2V fading channels. It considers both transmitter and receiver mobility, making it suitable for analyzing mobile-to-mobile communication scenarios. The implementation includes:
@@ -11,6 +19,7 @@ The simulator implements a sum-of-sinusoids method to generate Gaussian processe
 - Analysis of autocorrelation functions
 - Phase distribution analysis
 - BER performance evaluation for DPSK modulation under different fading conditions
+
 
 ## Requirements
 
