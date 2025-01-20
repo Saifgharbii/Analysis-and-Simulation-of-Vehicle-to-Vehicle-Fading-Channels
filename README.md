@@ -1,4 +1,4 @@
-# Vehicle-to-Vehicle (V2V) Fading Channel Simulation
+# Analysis and Simulation of Vehicle to Vehicle Fading Channels
 
 This repository contains a Python implementation for simulating and analyzing Vehicle-to-Vehicle (V2V) fading channels in Rayleigh fading environments. The simulation includes generation of complex Gaussian processes, calculation of channel statistics, and visualization of various channel characteristics.
 
