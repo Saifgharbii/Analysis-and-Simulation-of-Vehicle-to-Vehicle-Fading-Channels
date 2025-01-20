@@ -1,128 +1,135 @@
 # Vehicle-to-Vehicle (V2V) Fading Channel Simulation
 
-This repository contains a Python implementation for simulating and analyzing Vehicle-to-Vehicle (V2V) fading channels in Rayleigh fading environments. The simulation includes generation of complex Gaussian processes, calculation of channel statistics, and visualization of various channel characteristics.
+This repository contains a Python implementation of a Vehicle-to-Vehicle (V2V) fading channel simulator. The simulation models the statistical properties of V2V communication channels, including envelope distribution, power gain distribution, autocorrelation, phase distribution, and bit error rate (BER) performance.
 
-## Authors
-- Saif Iddin Gharbi
-- Mouhamed Amine Trabelsi
-- Amal Madhi
-- Sirine Charrada
-- Chiheb El Din El Zidi
+## Description
+
+The simulator implements a sum-of-sinusoids method to generate Gaussian processes that model V2V fading channels. It considers both transmitter and receiver mobility, making it suitable for analyzing mobile-to-mobile communication scenarios. The implementation includes:
+
+- Generation of complex Gaussian processes using the sum-of-sinusoids method
+- Calculation and visualization of channel envelope and power gain distributions
+- Analysis of autocorrelation functions
+- Phase distribution analysis
+- BER performance evaluation for DPSK modulation under different fading conditions
 
 ## Requirements
 
-### Dependencies
+To run this simulation, you need:
+
 ```
-numpy >= 1.21.0
-scipy >= 1.7.0
-matplotlib >= 3.4.0
+Python 3.7+
+NumPy
+SciPy
+Matplotlib
 ```
 
-### Installation
-1. Clone this repository:
-```bash
-git clone https://github.com/Saifgharbii/Analysis-and-Simulation-of-Vehicle-to-Vehicle-Fading-Channels.git
-cd v2v-channel-simulation
-```
+You can install the required packages using pip:
 
-2. Install required packages:
 ```bash
 pip install numpy scipy matplotlib
 ```
 
-## Features
-
-The simulation implements the following key features:
-
-1. **Gaussian Process Generation**
-   The system uses a sum-of-sinusoids method that forms the foundation of the simulation. This implementation allows for configurable number of sinusoids to adjust the accuracy and complexity of the model. Users can also adjust Doppler frequencies to match specific vehicular scenarios and movement patterns.
-
-2. **Channel Characteristics Analysis**
-   The simulation calculates complex channel gains to model the V2V communication path. It analyses both envelope and power gain distributions to understand signal strength variations. The system also includes phase distribution analysis to track signal phase changes over time. Additionally, it computes the autocorrelation function to understand the temporal correlation of the channel.
-
-3. **Statistical Verification**
-   The Statistical Verification features ensure the accuracy of the simulation results. It compares theoretical and simulated probability density functions (PDFs) to validate the model's statistical properties. The system performs autocorrelation function validation to verify the temporal characteristics of the channel. It also analyses channel parameter distributions to ensure they match theoretical expectations.
-
-## Code Structure
-
-- `generate_gaussian_process()`: Generates Gaussian processes using sum-of-sinusoids
-- `theoretical_envelope_pdf()`: Calculates theoretical envelope PDF
-- `theoretical_power_pdf()`: Calculates theoretical power gain PDF
-- `theoretical_acf()`: Computes theoretical autocorrelation function
-
 ## Usage
 
-Run the simulation script:
+1. Clone this repository:
 ```bash
-python v2v_simulation.py
+git clone [your-repository-url]
+cd [repository-name]
 ```
 
-The script will generate several plots showing:
-- Gaussian process distribution
-- Envelope distribution
-- Power gain distribution
-- Autocorrelation function comparison
-- Channel phase distribution
+2. Run the simulation script:
+```bash
+python v2v_channel_simulation.py
+```
 
 ## Simulation Parameters
 
-Default parameters in the code:
-- Number of sinusoids (N): 8
-- Maximum Doppler frequency: 80 Hz
-- Standard deviations (σ₁, σ₂): 1.0
-- Sampling time (Ts): 0.0001 s
-- Simulation duration: 1 s
+The main simulation parameters can be adjusted in the code:
 
-These parameters can be modified in the code according to specific needs.
+- `N1, N2, N3, N4`: Number of sinusoids (default: 8)
+- `fmax_Tx, fmax_Rx`: Maximum Doppler frequencies in Hz (default: 80 Hz)
+- `sigma1, sigma2`: Standard deviations of the Gaussian processes (default: 1.0)
+- `Ts`: Sampling time (default: 0.0001 seconds)
+- `D`: Data rate for BER calculation (default: 1 Mb/s)
 
-## Example Results
+## Output Plots
 
-### Gaussian Process Distribution
-![Gaussian Process](figures/gaussian_process.png)
-	The Gaussian Process Distribution graph displays how the generated Gaussian process behaves over time. This visualization allows users to verify that the generated random processes follow the expected normal distribution, providing a fundamental validation of the simulation's core functionality.
+The simulation generates several plots:
 
-### Envelope Distribution
-![Envelope Distribution](figures/envelope_distribution.png)
-	The Envelope Distribution visualization shows the probability density function of the signal envelope. This graph demonstrates how well the simulated results align with theoretical predictions, offering crucial validation of the channel model's amplitude characteristics.
+1. **Gaussian Process Distribution**: Validates the Gaussian nature of the generated processes
+2. **Envelope Distribution**: Shows the distribution of the channel envelope
+3. **Power Gain Distribution**: Displays the distribution of channel power gain
+4. **Autocorrelation Function**: Compares simulated and theoretical autocorrelation
+5. **Phase Distribution**: Shows the distribution of channel phase
+6. **BER Performance**: Compares BER under slow and fast fading conditions
 
-### Power Gain Distribution
-![Power Gain Distribution](figures/power_gain.png)
-	The Power Gain Distribution plot illustrates how the channel's power gain varies across the simulation. This visualization helps users understand the signal strength fluctuations and verify that they follow expected theoretical patterns for V2V communications.
+## Mathematical Models
+
+The simulation implements several theoretical models:
+
+### Envelope PDF
+```python
+PDF(z) = (4z)/(σ₁²σ₂²) * K₀(2z/(σ₁σ₂))
+```
+where K₀ is the modified Bessel function of the second kind of order zero.
+
+### Power Gain PDF
+```python
+PDF(w) = 2/(σ₁²σ₂²) * K₀(2√w/(σ₁σ₂))
+```
 
 ### Autocorrelation Function
-![ACF Comparison](figures/acf_comparison.png)
-	The Autocorrelation Function comparison demonstrates the temporal correlation properties of the simulated channel. By comparing simulated results with theoretical expectations, this visualization validates that the channel's time-varying characteristics are accurately modeled.
+```python
+ACF(τ) = J₀(2πfₘₐₓτ)
+```
+where J₀ is the zero-order Bessel function of the first kind.
 
-## Technical Details
+# Vehicle-to-Vehicle (V2V) Fading Channel Simulation
 
-The simulation is based on the following channel model:
+## Results
 
-1. **Complex Channel Gain**:
-   ```
-   h = h₁h₂ = (x₁ + jy₁)(x₂ + jy₂)
-   ```
-   where xᵢ, yᵢ are independent Gaussian random variables
+The simulation generates several plots that demonstrate different aspects of the V2V fading channel characteristics. Here are the detailed results and their interpretations:
 
-2. **Envelope PDF**:
-   ```
-   pR(z) = (4z)/(σ₁²σ₂²)K₀(2z/(σ₁σ₂))
-   ```
-   where K₀ is the modified Bessel function
+### 1. Gaussian Process Distribution
+![Gaussian Process Distribution](./figures/gaussian_process.png)
 
-3. **Autocorrelation Function**:
-   ```
-   Γxx(τ) = Γyy(τ) = (σ₁²σ₂²/2)J₀(2πfmax,Txτ)J₀(2πfmax,Rxτ)
-   ```
+This plot validates the Gaussian nature of our generated processes. The histogram of the simulated samples (blue) closely follows the theoretical Gaussian distribution (red line), confirming that our sum-of-sinusoids method correctly generates Gaussian random processes. The close match between theoretical and simulated distributions indicates the accuracy of our channel modeling approach.
+
+### 2. Envelope Distribution
+![Envelope Distribution](./figures/envelope_distribution.png)
+
+The envelope distribution plot shows the probability density function (PDF) of the channel envelope. The simulated histogram matches the theoretical double-Rayleigh distribution, which is characteristic of V2V channels. This distribution arises from the product of two complex Gaussian processes, representing the cascaded fading effect between the transmitter and receiver vehicles. The good agreement between theoretical and simulated results validates our implementation.
+
+### 3. Power Gain Distribution
+![Power Gain Distribution](./figures/power_gain.png)
+
+This plot displays the distribution of the channel power gain (Ω = R²), where R is the envelope amplitude. The power gain distribution is particularly important for link budget calculations and fade margin determination in V2V communications. The theoretical curve shows the expected distribution derived from the double-Rayleigh model, while the histogram represents our simulation results.
+
+### 4. Autocorrelation Function
+![Autocorrelation Function](./figures/acf_comparison.png)
+
+The autocorrelation function (ACF) plot demonstrates the temporal correlation properties of the channel. The simulated ACF (solid line) is compared with the theoretical Bessel function (dashed line). This correlation structure is crucial for understanding the time-varying nature of the channel and its impact on system performance. The plot shows how quickly the channel decorrelates over time, which is essential for determining parameters like coherence time and interleaver design.
+
+### 5. Phase Distribution
+![Phase Distribution](./figures/phase_distribution.png)
+
+The phase distribution plot shows the statistical properties of the channel phase variations. In V2V channels, the phase is expected to be uniformly distributed over [-π, π]. This uniform distribution is a result of the random scattering environment between the transmitter and receiver vehicles. The histogram demonstrates this uniform characteristic, which is important for analyzing phase-dependent modulation schemes.
+
+### 6. BER Performance
+![BER Performance](./figures/ber_performance.png)
+
+This plot compares the Bit Error Rate (BER) performance under slow and fast fading conditions for DPSK modulation. The blue line represents slow fading scenarios (low vehicle speeds or low Doppler spread), while the red dashed line shows fast fading conditions (high vehicle speeds or high Doppler spread). The degradation in performance under fast fading is clearly visible, demonstrating the impact of mobility on communication reliability. This analysis is crucial for designing robust V2V communication systems and selecting appropriate modulation schemes.
+
 
 ## Contributing
 
-Contributions to improve the simulation are welcome. Please follow these steps:
-1. Fork the repository
-2. Create a new branch
-3. Make your changes
-4. Submit a pull request
+Feel free to submit issues and enhancement requests!
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+[Specify your license here]
 
+## References
+
+1. G. L. Stüber, "Principles of Mobile Communication," Springer, 2017.
+2. C. S. Patel, G. L. Stüber, and T. G. Pratt, "Statistical properties of amplify and forward relay fading channels," IEEE Transactions on Vehicular Technology, 2006.
