@@ -1,4 +1,4 @@
-# Vehicle-to-Vehicle (V2V) Fading Channel Simulation
+# Analysis and Simulation of Vehicle to Vehicle Fading Channels
 
 This repository contains a Python implementation of a Vehicle-to-Vehicle (V2V) fading channel simulator. The simulation models the statistical properties of V2V communication channels, including envelope distribution, power gain distribution, autocorrelation, phase distribution, and bit error rate (BER) performance.
 
