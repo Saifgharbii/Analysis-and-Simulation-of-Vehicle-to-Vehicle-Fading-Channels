@@ -2,6 +2,7 @@ import numpy as np
 from scipy import special
 from scipy import stats
 import matplotlib.pyplot as plt
+from scipy.stats import laplace 
 
 def generate_gaussian_process(t, N, sigma, fmax):
     """Generate Gaussian process using sum of sinusoids method"""
@@ -23,7 +24,7 @@ def theoretical_power_pdf(w, sigma1, sigma2):
     return 2/(sigma1**2 * sigma2**2) * special.k0(2*np.sqrt(w)/(sigma1*sigma2))
 
 # Simulation parameters
-N1 = N2 = N3 = N4 = 8  # Number of sinusoids
+N1 = N2 = N3 = N4 = 10^6  # Number of sinusoids
 fmax_Tx = fmax_Rx = 80  # Maximum Doppler frequencies (Hz)
 sigma1 = sigma2 = 1.0   # Standard deviations
 Ts = 0.0001            # Sampling time
@@ -48,6 +49,8 @@ R = np.abs(h)
 Omega = R**2
 phase = np.angle(h)
 
+
+# Question 3
 # Plot Gaussian Process Distribution
 plt.figure(figsize=(10, 6))
 plt.hist(x1, bins=50, density=True, alpha=0.7, label='Simulated')
@@ -61,6 +64,107 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
+
+
+# Question 4
+# Calculate and plot ACF
+def theoretical_acf(tau, fmax):
+    """Calculate theoretical autocorrelation function"""
+    return (sigma1**2 / 2) * special.j0(2 * np.pi * fmax * tau)
+
+max_lag = 1000
+lags = np.arange(-max_lag, max_lag+1)
+tau = lags * Ts
+
+# Calculate ACF using numpy's correlate
+acf_x1 = np.correlate(x1 - np.mean(x1), x1 - np.mean(x1), mode='full')
+acf_x1 = acf_x1[len(acf_x1)//2 - max_lag:len(acf_x1)//2 + max_lag + 1]
+acf_x1 = acf_x1 / acf_x1[max_lag]  # Normalize
+
+plt.figure(figsize=(10, 6))
+plt.plot(tau, acf_x1, label='Simulated')
+plt.plot(tau, theoretical_acf(tau, fmax_Tx), 'r--', label='Theoretical')
+plt.title('Autocorrelation Function (x1 x1) Comparison')
+plt.xlabel('Time lag (τ)')
+plt.ylabel('ACF')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+# Nombre de sinusoïdes à tester
+N_values = [4, 64]
+
+# Paramètres pour l'ACF
+max_lag = 1000
+lags = np.arange(0, max_lag + 1)  # Temps positif seulement
+tau = lags * Ts
+
+plt.figure(figsize=(10, 6))
+
+for i, N in enumerate(N_values):
+    # Générer des processus gaussiens simulés
+    x_simulated = generate_gaussian_process(t, N, sigma1, fmax_Tx)
+    y_simulated = generate_gaussian_process(t, N, sigma1, fmax_Tx)
+
+    # Calculer les ACFs simulées
+    acf_x1 = np.correlate(x_simulated - np.mean(x_simulated), 
+                         x_simulated - np.mean(x_simulated), mode='full')
+    acf_x1 = acf_x1[len(acf_x1)//2:]  # Conserver seulement τ >= 0
+    acf_x1 /= acf_x1[0]  # Normalisation
+    
+    acf_y1 = np.correlate(y_simulated - np.mean(y_simulated), 
+                         y_simulated - np.mean(y_simulated), mode='full')
+    acf_y1 = acf_y1[len(acf_y1)//2:]  # Conserver seulement τ >= 0
+    acf_y1 /= acf_y1[0]  # Normalisation
+
+    # Tracer les résultats
+    plt.subplot(3, 2, i + 1)
+    plt.plot(tau, acf_x1[:len(tau)], label='Simulated ACF x', linewidth=1.5)
+    plt.plot(tau, acf_y1[:len(tau)], label='Simulated ACF y', linewidth=1.5)
+    plt.plot(tau, theoretical_acf(tau, fmax_Tx), 'r--', label='Theoretical ACF', linewidth=1.5)
+    plt.title(f'N = {N}')
+    plt.xlabel('Time lag (τ)')
+    plt.ylabel('ACF')
+    plt.legend()
+    plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Question 5
+# Calculer x et y
+x = x1 * x2 - y1 * y2
+y = x1 * y2 + x2 * y1
+
+# Histogramme des données simulées
+plt.figure(figsize=(10, 6))
+
+# Histogramme pour x
+plt.subplot(1, 2, 1)
+plt.hist(x, bins=50, density=True, alpha=0.7, label='Simulated x')
+x_range = np.linspace(min(x), max(x), 100)
+plt.plot(x_range, laplace.pdf(x_range, loc=0, scale=sigma1 * sigma2), 'r-', label='Theoretical x')
+plt.title('Difference between Simulated and Theoretical x')
+plt.xlabel('x')
+plt.ylabel('PDF')
+plt.legend()
+
+# Histogramme pour y
+plt.subplot(1, 2, 2)
+plt.hist(y, bins=50, density=True, alpha=0.7, label='Simulated y')
+y_range = np.linspace(min(y), max(y), 100)
+plt.plot(y_range, laplace.pdf(y_range, loc=0, scale=sigma1 * sigma2), 'r-', label='Theoretical y')
+plt.title('Difference between Simulated and Theoretical y')
+plt.xlabel('y')
+plt.ylabel('PDF')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+
+
+# Question 6
 # Plot Envelope Distribution
 plt.figure(figsize=(10, 6))
 plt.hist(R, bins=50, density=True, alpha=0.7, label='Simulated')
@@ -87,30 +191,7 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
-# Calculate and plot ACF
-def theoretical_acf(tau, fmax):
-    """Calculate theoretical autocorrelation function"""
-    return special.j0(2*np.pi*fmax*tau)
-
-max_lag = 1000
-lags = np.arange(-max_lag, max_lag+1)
-tau = lags * Ts
-
-# Calculate ACF using numpy's correlate
-acf_x1 = np.correlate(x1 - np.mean(x1), x1 - np.mean(x1), mode='full')
-acf_x1 = acf_x1[len(acf_x1)//2 - max_lag:len(acf_x1)//2 + max_lag + 1]
-acf_x1 = acf_x1 / acf_x1[max_lag]  # Normalize
-
-plt.figure(figsize=(10, 6))
-plt.plot(tau, acf_x1, label='Simulated')
-plt.plot(tau, theoretical_acf(tau, fmax_Tx), 'r--', label='Theoretical')
-plt.title('Autocorrelation Function Comparison')
-plt.xlabel('Time lag (τ)')
-plt.ylabel('ACF')
-plt.legend()
-plt.grid(True)
-plt.show()
-
+# Question 7
 # Plot Phase Distribution
 plt.figure(figsize=(10, 6))
 plt.hist(phase, bins=50, density=True, alpha=0.7)
@@ -120,6 +201,8 @@ plt.ylabel('PDF')
 plt.grid(True)
 plt.show()
 
+
+# Question 9
 # Calculate BER for DPSK
 gamma_dB = np.arange(0, 31, 2)
 gamma_linear = 10**(gamma_dB/10)
@@ -148,5 +231,3 @@ plt.xlabel('Average SNR (dB)')
 plt.ylabel('BER')
 plt.title('BER Performance of DPSK in V2V Channel')
 plt.legend()
-plt.show()
-
