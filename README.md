@@ -62,18 +62,18 @@ The autocorrelation function comparison shows how the channel correlation change
 Displays the distribution of in-phase (x) and quadrature (y) components, both following Laplace distributions as expected in V2V channels.
 
 ### Envelope and Power Distribution
-![Envelope Distribution](envelope_distribution.png)
-![Power Distribution](power_gain.png)
+![Envelope Distribution](./figures/envelope_distribution.png)
+![Power Distribution](./figures/power_gain.png)
 
 These plots show the channel envelope and power gain distributions, which are crucial for understanding the fading characteristics of the V2V channel.
 
 ### Phase Distribution
-![Phase Distribution](phase_distribution.png)
+![Phase Distribution](./figures/phase_distribution.png)
 
 The phase distribution plot shows the statistical properties of the channel phase variations. In V2V channels, the phase is expected to be uniformly distributed over [-π, π]. This uniform distribution is a result of the random scattering environment between the transmitter and receiver vehicles. The histogram demonstrates this uniform characteristic, which is important for analyzing phase-dependent modulation schemes.
 
 ### BER Performance
-![BER Performance](ber_performance.png)
+![BER Performance](./figures/ber_performance.png)
 
 This plot compares the Bit Error Rate (BER) performance under slow and fast fading conditions for DPSK modulation. The blue line represents slow fading scenarios (low vehicle speeds or low Doppler spread), while the red dashed line shows fast fading conditions (high vehicle speeds or high Doppler spread). The degradation in performance under fast fading is clearly visible, demonstrating the impact of mobility on communication reliability. This analysis is crucial for designing robust V2V communication systems and selecting appropriate modulation schemes.
 
